@@ -1,0 +1,46 @@
+name: Neo-SIRA Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Requerido por SonarCloud para un análisis completo
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # --- BACKEND ---
+      - name: Instalar dependencias Backend
+        working-directory: ./backend
+        run: npm install
+
+      - name: Ejecutar Pruebas y Cobertura Backend
+        working-directory: ./backend
+        run: npm run test -- --coverage
+
+      # --- FRONTEND ---
+      - name: Instalar dependencias Frontend
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Ejecutar Pruebas y Cobertura Frontend
+        working-directory: ./frontend
+        run: npm run test -- --coverage
+
+      # --- SONARCLOUD ---
+      - name: Análisis de SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
