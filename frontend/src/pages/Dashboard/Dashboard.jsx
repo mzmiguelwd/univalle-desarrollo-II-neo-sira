@@ -26,6 +26,22 @@ const Dashboard = () => {
       >
         Ver calificaciones
       </button>
+      <button
+        onClick={() => navigate("/tramites")}
+        style={{
+          marginTop: 12,
+          marginLeft: 8,
+          padding: "10px 16px",
+          fontSize: 16,
+          borderRadius: 8,
+          border: "none",
+          background: "#0f766e",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Ir a trámites
+      </button>
     </div>
   );
 };
