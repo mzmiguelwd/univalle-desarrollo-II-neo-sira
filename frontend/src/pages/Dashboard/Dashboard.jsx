@@ -26,6 +26,23 @@ const Dashboard = () => {
       >
         Ver calificaciones
       </button>
+      {/* Botón perfil */}
+      <button
+        onClick={() => navigate("/profile")}
+        style={{
+          marginTop: 12,
+          marginLeft: 10,
+          padding: "10px 16px",
+          fontSize: 16,
+          borderRadius: 8,
+          border: "none",
+          background: "#0f172a",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Mi perfil
+      </button>
     </div>
   );
 };
