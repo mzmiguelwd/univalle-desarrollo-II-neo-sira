@@ -8,7 +8,19 @@ const app = express();
 
 // Security: Disable X-Powered-By header to hide technology stack
 app.disable("x-powered-by");
-app.use(cors());
+const allowedOrigins = [process.env.FRONTEND_ORIGIN || "http://localhost:5173"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

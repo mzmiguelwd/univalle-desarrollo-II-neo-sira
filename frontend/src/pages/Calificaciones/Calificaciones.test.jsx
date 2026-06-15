@@ -197,7 +197,7 @@ describe("Componente Calificaciones", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/por favor inicia sesión para ver tus calificaciones/i)).toBeInTheDocument();
+      expect(screen.getByText(/por favor inicia sesión con un usuario válido para ver tus calificaciones/i)).toBeInTheDocument();
     });
   });
 

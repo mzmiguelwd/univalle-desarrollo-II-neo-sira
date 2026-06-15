@@ -46,6 +46,16 @@ describe("POST /api/auth/login", () => {
     expect(response.body.error).toBe("Credenciales inválidas.");
   });
 
+  test("Debe retornar 400 si el código de usuario contiene caracteres inválidos", async () => {
+    const response = await request(app)
+      .post("/api/auth/login")
+      .send({ usercode: "user!code", password: "123456" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    expect(response.body.error).toBe("Código de usuario inválido.");
+  });
+
   test("Debe retornar 401 si la contraseña es incorrecta", async () => {
     // Simulate that the database finds the user, but the real password is different
     User.findOne.mockResolvedValue({

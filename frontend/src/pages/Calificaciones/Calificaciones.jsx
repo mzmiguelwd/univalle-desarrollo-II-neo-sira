@@ -1,35 +1,41 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 const API_BASE = "";
 
 function gradeColor(grade) {
   if (grade >= 4.5) return { text: "#1a7a4a", bg: "#eaf3de" };
   if (grade >= 3.5) return { text: "#185FA5", bg: "#E6F1FB" };
-  if (grade >= 3.0) return { text: "#854F0B", bg: "#FAEEDA" };
+  if (grade >= 3) return { text: "#854F0B", bg: "#FAEEDA" };
   return { text: "#A32D2D", bg: "#FCEBEB" };
 }
 
 function gradeLabel(grade) {
   if (grade >= 4.5) return "Excelente";
   if (grade >= 3.5) return "Bueno";
-  if (grade >= 3.0) return "Regular";
+  if (grade >= 3) return "Regular";
   return "Insuficiente";
 }
 
 function GradeBar({ grade }) {
-  const { text } = gradeColor(grade);
-  const pct = ((grade / 5) * 100).toFixed(1);
+  const safeGrade = typeof grade === "number" ? grade : 0;
+  const { text } = gradeColor(safeGrade);
+  const pct = ((safeGrade / 5) * 100).toFixed(1);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
       <div style={{ flex: 1, height: 5, background: "#e5e7eb", borderRadius: 99, overflow: "hidden" }}>
         <div style={{ width: `${pct}%`, height: "100%", background: text, borderRadius: 99 }} />
       </div>
       <span style={{ fontWeight: 500, fontSize: 14, color: text, minWidth: 28, textAlign: "right" }}>
-        {grade.toFixed(1)}
+        {safeGrade.toFixed(1)}
       </span>
     </div>
   );
 }
+
+GradeBar.propTypes = {
+  grade: PropTypes.number.isRequired,
+};
 
 export default function Calificaciones() {
   const [student, setStudent] = useState(null);
@@ -40,14 +46,17 @@ export default function Calificaciones() {
   const userCode = localStorage.getItem("userCode");
   const storedName = localStorage.getItem("userName");
 
+  const isValidUserCode = (value) => typeof value === "string" && /^[A-Za-z0-9-]+$/.test(value);
+
   useEffect(() => {
-    if (!userCode) {
-      setError("Por favor inicia sesión para ver tus calificaciones.");
+    if (!userCode || !isValidUserCode(userCode)) {
+      setError("Por favor inicia sesión con un usuario válido para ver tus calificaciones.");
       setLoading(false);
       return;
     }
 
-    fetch(`${API_BASE}/api/grades/${encodeURIComponent(userCode)}`)
+    const safeUserCode = encodeURIComponent(userCode);
+    fetch(`${API_BASE}/api/grades/${safeUserCode}`)
       .then((r) => {
         if (!r.ok) throw new Error("No se encontraron calificaciones");
         return r.json();

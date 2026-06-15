@@ -93,6 +93,13 @@ describe("GET /api/grades/:userCode", () => {
     expect(response.body.error).toBe("Estudiante no encontrado");
   });
 
+  test("Debe retornar 400 si el userCode es inválido", async () => {
+    const response = await request(app).get("/api/grades/invalid!code");
+
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe("User code inválido");
+  });
+
   test("Debe retornar los 4 semestres con 4 materias cada uno", async () => {
     // Simulate that the database finds the student with complete semester data
     Grades.findOne.mockResolvedValue(mockStudent);
@@ -104,6 +111,28 @@ describe("GET /api/grades/:userCode", () => {
       expect(sem.subjects).toHaveLength(4);
       expect(sem.average).toBeDefined();
     });
+  });
+
+  test("Debe permitir solicitudes desde el origen permitido", async () => {
+    Grades.findOne.mockResolvedValue(mockStudent);
+
+    const response = await request(app)
+      .get("/api/grades/2415330-2724")
+      .set("Origin", "http://localhost:5173");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["access-control-allow-origin"]).toBe("http://localhost:5173");
+  });
+
+  test("Debe denegar solicitudes desde un origen no permitido", async () => {
+    Grades.findOne.mockResolvedValue(mockStudent);
+
+    const response = await request(app)
+      .get("/api/grades/2415330-2724")
+      .set("Origin", "http://malicious.com");
+
+    expect(response.status).toBe(500);
+    expect(response.text).toContain("Not allowed by CORS");
   });
 
   test("Debe retornar 500 si ocurre un error interno del servidor (caída de BD)", async () => {
