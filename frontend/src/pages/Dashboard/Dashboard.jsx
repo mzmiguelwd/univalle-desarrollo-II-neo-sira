@@ -26,6 +26,21 @@ const Dashboard = () => {
       >
         Ver calificaciones
       </button>
+      <button
+        onClick={() => navigate("/schedule")}
+        style={{
+          marginTop: 20,
+          padding: "10px 16px",
+          fontSize: 16,
+          borderRadius: 8,
+          border: "none",
+          background: "#2563eb",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Ver tabulado
+      </button>
     </div>
   );
 };
