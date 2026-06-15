@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-
-const API_BASE = "";
+import PropTypes from "prop-types";
 
 function Profile() {
   const userCode = localStorage.getItem("userCode");
@@ -22,6 +21,9 @@ function Profile() {
   const isValidUserCode = (value) =>
     typeof value === "string" && /^[A-Za-z0-9-]+$/.test(value);
 
+  const buildProfileUrl = (code) =>
+    `/api/profile/${encodeURIComponent(code)}`;
+
   // =========================
   // GET PROFILE
   // =========================
@@ -32,7 +34,7 @@ function Profile() {
       return;
     }
 
-    fetch(`${API_BASE}/api/profile/${encodeURIComponent(userCode)}`)
+    fetch(buildProfileUrl(userCode))
       .then((r) => {
         if (!r.ok) throw new Error("No se pudo cargar el perfil");
         return r.json();
@@ -78,16 +80,13 @@ function Profile() {
     e.preventDefault();
 
     try {
-      const res = await fetch(
-        `${API_BASE}/api/profile/${encodeURIComponent(userCode)}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
+      const res = await fetch(buildProfileUrl(userCode), {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
       const data = await res.json();
 
@@ -135,7 +134,13 @@ function Profile() {
         <Input label="Ciudad de residencia" name="residence_city" value={form.residence_city} onChange={handleChange} />
         <Input label="Ciudad de nacimiento" name="birth_city" value={form.birth_city} onChange={handleChange} />
         <Input label="Barrio de residencia" name="district" value={form.district} onChange={handleChange} />
-        <Input label="Fecha de nacimiento" name="birth_date" type="date" value={form.birth_date} onChange={handleChange} />
+        <Input
+          label="Fecha de nacimiento"
+          name="birth_date"
+          type="date"
+          value={form.birth_date}
+          onChange={handleChange}
+        />
 
         <button type="submit" style={s.button}>
           Guardar cambios
@@ -162,6 +167,17 @@ function Input({ label, name, value, onChange, type = "text" }) {
     </div>
   );
 }
+
+// =========================
+// PROP TYPES (FIX SONARQUBE)
+// =========================
+Input.propTypes = {
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  type: PropTypes.string,
+};
 
 // =========================
 // STYLES
