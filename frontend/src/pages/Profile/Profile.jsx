@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 function Profile() {
-  const userCode = localStorage.getItem("userCode");
+  const rawUserCode = localStorage.getItem("userCode");
 
   const [form, setForm] = useState({
     name: "",
@@ -21,20 +21,32 @@ function Profile() {
   const isValidUserCode = (value) =>
     typeof value === "string" && /^[A-Za-z0-9-]+$/.test(value);
 
-  const buildProfileUrl = (code) =>
-    `/api/profile/${encodeURIComponent(code)}`;
+  // 🔒 Sanitización explícita (clave para Sonar)
+  const safeUserCode = isValidUserCode(rawUserCode) ? rawUserCode : null;
+
+  const buildProfileUrl = (code) => {
+    if (!isValidUserCode(code)) return null;
+    return `/api/profile/${encodeURIComponent(code)}`;
+  };
 
   // =========================
   // GET PROFILE
   // =========================
   useEffect(() => {
-    if (!userCode || !isValidUserCode(userCode)) {
+    if (!safeUserCode) {
       setError("Usuario inválido. Inicia sesión nuevamente.");
       setLoading(false);
       return;
     }
 
-    fetch(buildProfileUrl(userCode))
+    const url = buildProfileUrl(safeUserCode);
+    if (!url) {
+      setError("Usuario inválido.");
+      setLoading(false);
+      return;
+    }
+
+    fetch(url)
       .then((r) => {
         if (!r.ok) throw new Error("No se pudo cargar el perfil");
         return r.json();
@@ -61,7 +73,7 @@ function Profile() {
         setError(e.message);
         setLoading(false);
       });
-  }, [userCode]);
+  }, [safeUserCode]);
 
   // =========================
   // HANDLE CHANGE
@@ -79,8 +91,19 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!safeUserCode) {
+      setError("Usuario inválido.");
+      return;
+    }
+
+    const url = buildProfileUrl(safeUserCode);
+    if (!url) {
+      setError("Usuario inválido.");
+      return;
+    }
+
     try {
-      const res = await fetch(buildProfileUrl(userCode), {
+      const res = await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
