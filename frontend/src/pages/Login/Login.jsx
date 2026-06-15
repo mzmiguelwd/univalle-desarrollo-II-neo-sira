@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,6 +31,8 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        localStorage.setItem("userCode", data.data.usercode);
+        localStorage.setItem("userName", data.data.name);
         navigate("/dashboard");
       } else {
         setError(data.error || "Error al iniciar sesión");
