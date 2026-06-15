@@ -14,19 +14,52 @@ const Dashboard = () => {
       <button
         onClick={() => navigate("/calificaciones")}
         style={{
-          marginTop: 20,
+          marginTop: 12,
+          marginLeft: 8,
           padding: "10px 16px",
           fontSize: 16,
           borderRadius: 8,
           border: "none",
-          background: "#2563eb",
+          background: "#0f766e",
           color: "white",
           cursor: "pointer",
         }}
       >
         Ver calificaciones
       </button>
-      {/* Botón perfil */}
+      <button
+        onClick={() => navigate("/schedule")}
+        style={{
+          marginTop: 12,
+          marginLeft: 8,
+          padding: "10px 16px",
+          fontSize: 16,
+          borderRadius: 8,
+          border: "none",
+          background: "#0f766e",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Ver tabulado
+      </button>
+      <button
+        onClick={() => navigate("/tramites")}
+        style={{
+          marginTop: 12,
+          marginLeft: 8,
+          padding: "10px 16px",
+          fontSize: 16,
+          borderRadius: 8,
+          border: "none",
+          background: "#0f766e",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Ir a trámites
+      </button>
+            {/* Botón perfil */}
       <button
         onClick={() => navigate("/profile")}
         style={{
@@ -36,7 +69,7 @@ const Dashboard = () => {
           fontSize: 16,
           borderRadius: 8,
           border: "none",
-          background: "#0f172a",
+          background: "#0f766e",
           color: "white",
           cursor: "pointer",
         }}
