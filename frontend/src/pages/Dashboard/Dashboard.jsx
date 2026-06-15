@@ -59,6 +59,23 @@ const Dashboard = () => {
       >
         Ir a trámites
       </button>
+            {/* Botón perfil */}
+      <button
+        onClick={() => navigate("/profile")}
+        style={{
+          marginTop: 12,
+          marginLeft: 10,
+          padding: "10px 16px",
+          fontSize: 16,
+          borderRadius: 8,
+          border: "none",
+          background: "#0f766e",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        Mi perfil
+      </button>
     </div>
   );
 };

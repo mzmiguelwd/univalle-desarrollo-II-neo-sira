@@ -5,6 +5,7 @@ const authRoutes = require("./routes/auth");
 const gradesRoutes = require("./routes/grades");
 const scheduleRoutes = require("./routes/schedule");
 const certificateRoutes = require("./routes/certificates");
+const profileRoutes = require("./routes/profile");
 
 const app = express();
 
@@ -30,5 +31,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/grades", gradesRoutes);
 app.use("/api/schedule", scheduleRoutes);
 app.use("/api/tramites", certificateRoutes);
+app.use("/api/profile", profileRoutes);
 
 module.exports = app;
