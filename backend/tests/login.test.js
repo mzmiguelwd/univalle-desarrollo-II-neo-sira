@@ -5,7 +5,17 @@ const User = require("../src/models/User.js");
 // Mock the User model so we don't have to interact with the actual database during testing
 jest.mock("../src/models/User.js");
 
-describe("POST /api/login", () => {
+describe("POST /api/auth/login", () => {
+  let consoleErrorSpy;
+
+  beforeAll(() => {
+    consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
   // Clear the mocks before each test so they don't interfere with each other
   beforeEach(() => {
     jest.clearAllMocks();
@@ -13,7 +23,7 @@ describe("POST /api/login", () => {
 
   test("Debe retornar 400 si faltan credenciales (Código o Contraseña)", async () => {
     const response = await request(app)
-      .post("/api/login")
+      .post("/api/auth/login")
       .send({ usercode: "estudiante" }); // Send it without the password
 
     expect(response.status).toBe(400);
@@ -28,12 +38,22 @@ describe("POST /api/login", () => {
     User.findOne.mockResolvedValue(null);
 
     const response = await request(app)
-      .post("/api/login")
+      .post("/api/auth/login")
       .send({ usercode: "fantasma", password: "123" });
 
     expect(response.status).toBe(401);
     expect(response.body.success).toBe(false);
     expect(response.body.error).toBe("Credenciales inválidas.");
+  });
+
+  test("Debe retornar 400 si el código de usuario contiene caracteres inválidos", async () => {
+    const response = await request(app)
+      .post("/api/auth/login")
+      .send({ usercode: "user!code", password: "123456" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    expect(response.body.error).toBe("Código de usuario inválido.");
   });
 
   test("Debe retornar 401 si la contraseña es incorrecta", async () => {
@@ -45,7 +65,7 @@ describe("POST /api/login", () => {
     });
 
     const response = await request(app)
-      .post("/api/login")
+      .post("/api/auth/login")
       .send({ usercode: "estudiante", password: "passwordEquivocada" });
 
     expect(response.status).toBe(401);
@@ -61,7 +81,7 @@ describe("POST /api/login", () => {
     });
 
     const response = await request(app)
-      .post("/api/login")
+      .post("/api/auth/login")
       .send({ usercode: "estudiante", password: "123456" });
 
     expect(response.status).toBe(200);
@@ -76,7 +96,7 @@ describe("POST /api/login", () => {
     User.findOne.mockRejectedValue(new Error("Error de conexión"));
 
     const response = await request(app)
-      .post("/api/login")
+      .post("/api/auth/login")
       .send({ usercode: "estudiante", password: "123456" });
 
     expect(response.status).toBe(500);

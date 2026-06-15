@@ -7,6 +7,7 @@ import {
 
 import Login from "./pages/Login/Login.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
+import Calificaciones from "./pages/Calificaciones/Calificaciones.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/calificaciones" element={<Calificaciones />} />
       </Routes>
     </Router>
   );
