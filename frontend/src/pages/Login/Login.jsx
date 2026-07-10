@@ -8,6 +8,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
   const handleLogin = async (event) => {
     event.preventDefault();
     setError("");
@@ -20,7 +22,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,6 +41,7 @@ const Login = () => {
       }
     } catch (error) {
       setError("Error de conexión con el servidor");
+      console.log("Error de conexión con el servidor:", error);
     } finally {
       setLoading(false);
     }
