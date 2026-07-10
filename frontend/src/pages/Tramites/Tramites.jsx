@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:3000/api/tramites/certificados";
+import Navbar from "../../components/Navbar";
 
 const INITIAL_STUDENT_ID = localStorage.getItem("userCode") || "2020001";
 const CERTIFICATE_TYPES = ["Estudios", "Notas"];
@@ -15,6 +15,9 @@ const Tramites = () => {
   const [error, setError] = useState(false);
   const [studentId, setStudentId] = useState(INITIAL_STUDENT_ID);
   const [certificateType, setCertificateType] = useState("Estudios");
+
+  // Retrieve API URL from environment variables
+  const API_URL = import.meta.env.VITE_API_URL || "";
 
   const handleRequestCertificate = async (event) => {
     event.preventDefault();
@@ -79,6 +82,7 @@ const Tramites = () => {
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
+      <Navbar />
       <section
         data-testid="tramites-card"
         aria-label="Trámites Académicos"
