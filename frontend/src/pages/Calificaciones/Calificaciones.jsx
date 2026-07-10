@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import Navbar from "../../components/Navbar";
+
 const API_URL = import.meta.env.VITE_API_URL || "";
 
 function gradeColor(grade) {
@@ -124,6 +126,7 @@ export default function Calificaciones() {
 
   return (
     <div style={s.page}>
+      <Navbar />
       {/* Header */}
       <div style={s.header}>
         <div>

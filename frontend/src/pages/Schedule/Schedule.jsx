@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import Navbar from "../../components/Navbar";
+
 const Schedule = () => {
   const usercode = localStorage.getItem("userCode");
   const [courses, setCourses] = useState([]);
@@ -76,6 +78,7 @@ const Schedule = () => {
 
   return (
     <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+      <Navbar />
       <h2>Mi Tabulado y Horario Semanal</h2>
 
       {/* SECCIÓN 2: El Resumen Oficial */}

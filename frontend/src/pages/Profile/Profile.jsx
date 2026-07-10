@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import Navbar from "../../components/Navbar";
+
+const API_URL = import.meta.env.VITE_API_URL || "";
+
 function Profile() {
   const rawUserCode = localStorage.getItem("userCode");
 
@@ -26,7 +30,7 @@ function Profile() {
 
   const buildProfileUrl = (code) => {
     if (!isValidUserCode(code)) return null;
-    return `/api/profile/${encodeURIComponent(code)}`;
+    return `${API_URL}/api/profile/${encodeURIComponent(code)}`;
   };
 
   // =========================
@@ -147,16 +151,52 @@ function Profile() {
   // =========================
   return (
     <div style={s.page}>
+      <Navbar />
       <h1 style={s.title}>Mi Perfil</h1>
 
       <form onSubmit={handleSubmit} style={s.form}>
-        <Input label="Nombre" name="name" value={form.name} onChange={handleChange} />
-        <Input label="Correo" name="email" value={form.email} onChange={handleChange} />
-        <Input label="Teléfono" name="phone" value={form.phone} onChange={handleChange} />
-        <Input label="Dirección" name="address" value={form.address} onChange={handleChange} />
-        <Input label="Ciudad de residencia" name="residence_city" value={form.residence_city} onChange={handleChange} />
-        <Input label="Ciudad de nacimiento" name="birth_city" value={form.birth_city} onChange={handleChange} />
-        <Input label="Barrio de residencia" name="district" value={form.district} onChange={handleChange} />
+        <Input
+          label="Nombre"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+        />
+        <Input
+          label="Correo"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+        />
+        <Input
+          label="Teléfono"
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+        />
+        <Input
+          label="Dirección"
+          name="address"
+          value={form.address}
+          onChange={handleChange}
+        />
+        <Input
+          label="Ciudad de residencia"
+          name="residence_city"
+          value={form.residence_city}
+          onChange={handleChange}
+        />
+        <Input
+          label="Ciudad de nacimiento"
+          name="birth_city"
+          value={form.birth_city}
+          onChange={handleChange}
+        />
+        <Input
+          label="Barrio de residencia"
+          name="district"
+          value={form.district}
+          onChange={handleChange}
+        />
         <Input
           label="Fecha de nacimiento"
           name="birth_date"

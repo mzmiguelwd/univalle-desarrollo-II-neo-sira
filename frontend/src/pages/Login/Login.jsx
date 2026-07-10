@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
   const [usercode, setUsercode] = useState("");
@@ -8,8 +9,10 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Retrieve API URL from environment variables
   const API_URL = import.meta.env.VITE_API_URL || "";
 
+  // Handle the authentication submission
   const handleLogin = async (event) => {
     event.preventDefault();
     setError("");
@@ -33,6 +36,7 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        // Store user data on successful authentication
         localStorage.setItem("userCode", data.data.usercode);
         localStorage.setItem("userName", data.data.name);
         navigate("/dashboard");
@@ -41,45 +45,72 @@ const Login = () => {
       }
     } catch (error) {
       setError("Error de conexión con el servidor");
-      console.log("Error de conexión con el servidor:", error);
+      console.log("Connection error:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Helper function to quick-fill test credentials
+  const fillTestCredentials = () => {
+    setUsercode("2415330-2724");
+    setPassword("2415330-2724");
+    setError("");
+  };
+
   return (
-    <div
-      className="login-container"
-      style={{ maxWidth: "300px", margin: "50px auto" }}
-    >
-      <h2>Iniciar Sesión en Neo-SIRA</h2>
+    <div className="login-page">
+      <div className="login-card">
+        <h2 className="login-title">Iniciar Sesión en Neo-SIRA</h2>
 
-      {error && (
-        <p role="alert" style={{ color: "red" }}>
-          {error}
-        </p>
-      )}
+        {error && (
+          <div className="error-message" role="alert">
+            {error}
+          </div>
+        )}
 
-      <form
-        onSubmit={handleLogin}
-        style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-      >
-        <input
-          type="text"
-          placeholder="Código de Usuario"
-          value={usercode}
-          onChange={(e) => setUsercode(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Verificando..." : "Ingresar"}
-        </button>
-      </form>
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="input-group">
+            <label className="input-label">Código de Usuario</label>
+            <input
+              type="text"
+              className="login-input"
+              placeholder="Ej: 2415330-2724"
+              value={usercode}
+              onChange={(e) => setUsercode(e.target.value)}
+            />
+          </div>
+
+          <div className="input-group">
+            <label className="input-label">Contraseña</label>
+            <input
+              type="password"
+              className="login-input"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? "Verificando..." : "Ingresar"}
+          </button>
+        </form>
+
+        <div className="test-credentials-hint">
+          <p className="hint-title">¿Evaluando la aplicación?</p>
+          <p className="hint-text">
+            Usuario y Contraseña: <strong>2415330-2724</strong>
+          </p>
+          <button
+            type="button"
+            className="auto-fill-button"
+            onClick={fillTestCredentials}
+          >
+            Autocompletar credenciales
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

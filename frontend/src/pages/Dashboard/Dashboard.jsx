@@ -1,81 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
+import Navbar from "../../components/Navbar";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+  const userName = localStorage.getItem("userName") || "Estudiante";
 
   return (
-    <div style={{ padding: "20px", textAlign: "center" }}>
-      <h1>🎓 Bienvenido al Dashboard de Neo-SIRA</h1>
-      <p>
-        A partir de aquí, podrás gestionar tus cursos, revisar tus
-        calificaciones y mucho más. ¡Explora las opciones disponibles y saca el
-        máximo provecho de tu experiencia académica!
-      </p>
-      <button
-        onClick={() => navigate("/calificaciones")}
-        style={{
-          marginTop: 12,
-          marginLeft: 8,
-          padding: "10px 16px",
-          fontSize: 16,
-          borderRadius: 8,
-          border: "none",
-          background: "#0f766e",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Ver calificaciones
-      </button>
-      <button
-        onClick={() => navigate("/schedule")}
-        style={{
-          marginTop: 12,
-          marginLeft: 8,
-          padding: "10px 16px",
-          fontSize: 16,
-          borderRadius: 8,
-          border: "none",
-          background: "#0f766e",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Ver tabulado
-      </button>
-      <button
-        onClick={() => navigate("/tramites")}
-        style={{
-          marginTop: 12,
-          marginLeft: 8,
-          padding: "10px 16px",
-          fontSize: 16,
-          borderRadius: 8,
-          border: "none",
-          background: "#0f766e",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Ir a trámites
-      </button>
-      {/* Botón perfil */}
-      <button
-        onClick={() => navigate("/profile")}
-        style={{
-          marginTop: 12,
-          marginLeft: 10,
-          padding: "10px 16px",
-          fontSize: 16,
-          borderRadius: 8,
-          border: "none",
-          background: "#0f766e",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        Mi perfil
-      </button>
+    <div className="dashboard-page">
+      <Navbar />
+      <main className="dashboard-content">
+        <div className="welcome-card">
+          <span className="welcome-icon">🎓</span>
+          <h1>¡Bienvenido, {userName}!</h1>
+          <p className="welcome-message">
+            Esta es tu plataforma Neo-SIRA. Desde aquí puedes gestionar tus
+            actividades académicas, consultar calificaciones y realizar tus
+            trámites administrativos de forma centralizada.
+          </p>
+        </div>
+      </main>
     </div>
   );
 };

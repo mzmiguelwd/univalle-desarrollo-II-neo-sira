@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Navbar from "../../components/Navbar";
+
 const API_URL = "http://localhost:3000/api/tramites/certificados";
 
 const INITIAL_STUDENT_ID = localStorage.getItem("userCode") || "2020001";
@@ -79,6 +81,7 @@ const Tramites = () => {
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
+      <Navbar />
       <section
         data-testid="tramites-card"
         aria-label="Trámites Académicos"
