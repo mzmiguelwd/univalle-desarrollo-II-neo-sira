@@ -59,7 +59,7 @@ const Dashboard = () => {
       >
         Ir a trámites
       </button>
-            {/* Botón perfil */}
+      {/* Botón perfil */}
       <button
         onClick={() => navigate("/profile")}
         style={{
