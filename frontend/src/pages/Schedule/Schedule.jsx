@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Navbar from "../../components/Navbar";
+import "../sharedPageStyles.css";
 
 const Schedule = () => {
   const usercode = localStorage.getItem("userCode");
@@ -31,9 +32,9 @@ const Schedule = () => {
         } else {
           setError(data.error || "No se pudo cargar el tabulado.");
         }
-      } catch (error) {
+      } catch (fetchError) {
         setError("Error de conexión con el servidor.");
-        console.log("Error de conexión con el servidor:", error);
+        console.log("Error de conexión con el servidor:", fetchError);
       } finally {
         setLoading(false);
       }
@@ -47,8 +48,25 @@ const Schedule = () => {
     }
   }, [usercode]);
 
-  if (loading) return <div>Cargando tu tabulado...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
+  if (loading) {
+    return (
+      <div className="page-center">
+        <div className="status-card">
+          <p className="status-text">Cargando tu tabulado...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-center">
+        <div className="status-card">
+          <p className="status-text status-text--error">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   const getClassForSlot = (day, hour) => {
     if (!courses || courses.length === 0) return null;
@@ -67,133 +85,142 @@ const Schedule = () => {
             courseStart <= Number.parseInt(hour) &&
             Number.parseInt(hour) < courseStart + duration
           ) {
-            // Retornamos el curso y también los detalles de este bloque de horario específico
             return { courseDetails: course, scheduleDetails: scheduleItem };
           }
         }
       }
     }
+
     return null;
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
+    <div className="page-shell">
       <Navbar />
-      <h2>Mi Tabulado y Horario Semanal</h2>
+      <main className="page-content">
+        <div className="page-container">
+          <div className="page-hero">
+            <div>
+              <h1 className="page-title">Mi Tabulado y Horario Semanal</h1>
+              <p className="page-subtitle">
+                Consulta el resumen de asignaturas y la cuadrícula semanal con
+                la identidad visual institucional.
+              </p>
+            </div>
+          </div>
 
-      {/* SECCIÓN 2: El Resumen Oficial */}
-      <div>
-        <h3>Resumen de Asignaturas Matriculadas</h3>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            textAlign: "left",
-          }}
-        >
-          <thead>
-            <tr
-              style={{
-                borderBottom: "2px solid #333",
-                backgroundColor: "#f9f9f9",
-              }}
-            >
-              <th style={{ padding: "10px" }}>Código</th>
-              <th style={{ padding: "10px" }}>Grupo</th>
-              <th style={{ padding: "10px" }}>Asignatura</th>
-              <th style={{ padding: "10px" }}>Tipo</th>
-              <th style={{ padding: "10px" }}>Créditos</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map((course) => (
-              <tr key={course._id} style={{ borderBottom: "1px solid #eee" }}>
-                <td style={{ padding: "10px" }}>{course.code}</td>
-                <td style={{ padding: "10px" }}>{course.group}</td>
-                <td style={{ padding: "10px" }}>{course.name}</td>
-                <td style={{ padding: "10px" }}>{course.type}</td>
-                <td style={{ padding: "10px" }}>{course.credits}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          <section className="table-card" style={{ marginBottom: 28 }}>
+            <div style={{ padding: "24px 24px 16px" }}>
+              <h3 className="section-title">
+                Resumen de Asignaturas Matriculadas
+              </h3>
+              <p className="section-copy">
+                Información oficial del periodo activo.
+              </p>
+            </div>
+            <div className="table-scroll">
+              <table
+                className="institution-table"
+                style={{ textAlign: "left" }}
+              >
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left" }}>Código</th>
+                    <th>Grupo</th>
+                    <th style={{ textAlign: "left" }}>Asignatura</th>
+                    <th>Tipo</th>
+                    <th>Créditos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {courses.map((course) => (
+                    <tr key={course._id}>
+                      <td style={{ textAlign: "left" }}>{course.code}</td>
+                      <td style={{ textAlign: "center" }}>{course.group}</td>
+                      <td style={{ textAlign: "left", fontWeight: 500 }}>
+                        {course.name}
+                      </td>
+                      <td style={{ textAlign: "center" }}>{course.type}</td>
+                      <td style={{ textAlign: "center" }}>{course.credits}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-      {/* SECCIÓN 1: La Cuadrícula Visual */}
-      <div style={{ marginBottom: "40px", overflowX: "auto" }}>
-        <h3>Horario Gráfico</h3>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            textAlign: "center",
-          }}
-        >
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid #ccc", padding: "10px" }}>
-                Hora
-              </th>
-              {weekDays.map((dia) => (
-                <th
-                  key={dia}
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  {dia}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {hours.map((hora) => (
-              <tr key={hora}>
-                <td
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: "10px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {hora}
-                </td>
-                {weekDays.map((dia) => {
-                  const result = getClassForSlot(dia, hora);
-                  return (
-                    <td
-                      key={`${dia}-${hora}`}
-                      style={{
-                        border: "1px solid #ccc",
-                        padding: "10px",
-                        backgroundColor: result ? "#e6f7ff" : "white",
-                        color: result ? "#0050b3" : "inherit",
-                        verticalAlign: "top",
-                      }}
-                    >
-                      {result ? (
-                        <div style={{ fontSize: "0.85em", lineHeight: "1.4" }}>
-                          <strong>{result.courseDetails.name}</strong>
-                          <br />
-                          Gr: {result.courseDetails.group}
-                          <br />
-                          <span style={{ fontSize: "0.9em", color: "#555" }}>
-                            Edificio: {result.scheduleDetails.academicBuilding}
-                            <br />
-                            Salón: {result.scheduleDetails.classroom}
-                          </span>
-                        </div>
-                      ) : null}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          <section className="table-card">
+            <div style={{ padding: "24px 24px 16px" }}>
+              <h3 className="section-title">Horario Gráfico</h3>
+              <p className="section-copy">
+                Bloques semanales con referencia de edificio y salón.
+              </p>
+            </div>
+            <div className="table-scroll">
+              <table
+                className="institution-table"
+                style={{ textAlign: "center" }}
+              >
+                <thead>
+                  <tr>
+                    <th>Hora</th>
+                    {weekDays.map((dia) => (
+                      <th key={dia}>{dia}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {hours.map((hora) => (
+                    <tr key={hora}>
+                      <td style={{ fontWeight: 700, color: "#1e293b" }}>
+                        {hora}
+                      </td>
+                      {weekDays.map((dia) => {
+                        const result = getClassForSlot(dia, hora);
+                        return (
+                          <td
+                            key={`${dia}-${hora}`}
+                            style={{
+                              backgroundColor: result ? "#fff1f1" : "#ffffff",
+                              color: result ? "#7f1d1d" : "#475569",
+                              verticalAlign: "top",
+                            }}
+                          >
+                            {result ? (
+                              <div
+                                style={{
+                                  fontSize: "0.85em",
+                                  lineHeight: "1.5",
+                                }}
+                              >
+                                <strong>{result.courseDetails.name}</strong>
+                                <br />
+                                Gr: {result.courseDetails.group}
+                                <br />
+                                <span
+                                  style={{
+                                    fontSize: "0.9em",
+                                    color: "#64748b",
+                                  }}
+                                >
+                                  Edificio:{" "}
+                                  {result.scheduleDetails.academicBuilding}
+                                  <br />
+                                  Salón: {result.scheduleDetails.classroom}
+                                </span>
+                              </div>
+                            ) : null}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
     </div>
   );
 };

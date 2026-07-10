@@ -75,7 +75,7 @@ const Login = () => {
             <input
               type="text"
               className="login-input"
-              placeholder="Ej: 2415330-2724"
+              placeholder="Código de Usuario"
               value={usercode}
               onChange={(e) => setUsercode(e.target.value)}
             />
@@ -86,7 +86,7 @@ const Login = () => {
             <input
               type="password"
               className="login-input"
-              placeholder="••••••••"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

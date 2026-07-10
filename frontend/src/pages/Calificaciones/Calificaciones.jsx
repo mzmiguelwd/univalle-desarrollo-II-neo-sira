@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Navbar from "../../components/Navbar";
+import "../sharedPageStyles.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -102,16 +103,20 @@ export default function Calificaciones() {
 
   if (loading) {
     return (
-      <div style={s.center}>
-        <p style={{ color: "#64748b" }}>Cargando calificaciones…</p>
+      <div className="page-center">
+        <div className="status-card">
+          <p className="status-text">Cargando calificaciones…</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={s.center}>
-        <p style={{ color: "#dc2626" }}>⚠ {error}</p>
+      <div className="page-center">
+        <div className="status-card">
+          <p className="status-text status-text--error">⚠ {error}</p>
+        </div>
       </div>
     );
   }
@@ -125,118 +130,125 @@ export default function Calificaciones() {
   const gc = gradeColor(globalAvg);
 
   return (
-    <div style={s.page}>
+    <div className="page-shell">
       <Navbar />
-      {/* Header */}
-      <div style={s.header}>
-        <div>
-          <h1 style={s.title}>Mis Calificaciones</h1>
-          <p style={s.subtitle}>
-            {studentName} · {userCode}
-          </p>
-        </div>
-        <div style={s.avgBadge}>
-          <span style={s.avgLabel}>Promedio acumulado</span>
-          <span style={{ ...s.avgValue, color: gc.text }}>
-            {globalAvg.toFixed(2)}
-          </span>
-        </div>
-      </div>
-
-      {/* Tabs de semestres */}
-      <div style={s.tabsGrid}>
-        {semesters.map((sem, i) => {
-          const c = gradeColor(sem.average);
-          const isActive = i === activeSem;
-          return (
-            <button
-              key={sem.semester}
-              onClick={() => setActiveSem(i)}
-              style={{
-                ...s.tab,
-                border: isActive
-                  ? `1.5px solid ${c.text}`
-                  : "1px solid #e2e8f0",
-                background: isActive ? "#fff" : "#f8fafc",
-              }}
-            >
-              <span style={s.tabSemLabel}>Semestre</span>
-              <span style={s.tabSemName}>{sem.semester}</span>
-              <span style={{ ...s.tabAvg, color: c.text }}>
-                {sem.average.toFixed(2)}
+      <main className="page-content">
+        <div className="page-container">
+          <div className="page-hero">
+            <div>
+              <h1 className="page-title">Mis Calificaciones</h1>
+              <p className="page-subtitle">
+                {studentName} · {userCode}
+              </p>
+            </div>
+            <div style={s.avgBadge}>
+              <span style={s.avgLabel}>Promedio acumulado</span>
+              <span style={{ ...s.avgValue, color: gc.text }}>
+                {globalAvg.toFixed(2)}
               </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Panel detalle */}
-      <div style={s.panel}>
-        <div style={s.panelHeader}>
-          <div>
-            <p style={s.panelTitle}>Semestre {current.semester}</p>
-            <p style={s.panelSub}>{current.subjects.length} materias</p>
+            </div>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <p style={s.panelSub}>Promedio semestre</p>
-            <p style={{ ...s.panelAvg, color: gradeColor(semAvg).text }}>
-              {semAvg.toFixed(2)}
-            </p>
-          </div>
-        </div>
 
-        <table style={s.table}>
-          <thead>
-            <tr style={{ background: "#f8fafc" }}>
-              <th style={{ ...s.th, width: 40 }}>#</th>
-              <th style={{ ...s.th, textAlign: "left" }}>Materia</th>
-              <th style={{ ...s.th, minWidth: 160 }}>Nota</th>
-              <th style={s.th}>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {current.subjects.map((subj, i) => {
-              const c = gradeColor(subj.grade);
+          <div style={s.tabsGrid}>
+            {semesters.map((sem, i) => {
+              const c = gradeColor(sem.average);
+              const isActive = i === activeSem;
               return (
-                <tr
-                  key={subj.name}
+                <button
+                  key={sem.semester}
+                  onClick={() => setActiveSem(i)}
                   style={{
-                    borderTop: "1px solid #f1f5f9",
-                    background: i % 2 === 0 ? "#fff" : "#fafafa",
+                    ...s.tab,
+                    border: isActive
+                      ? `1.5px solid ${c.text}`
+                      : "1px solid #e2e8f0",
+                    background: isActive ? "#fff" : "#f8fafc",
                   }}
                 >
-                  <td
-                    style={{ ...s.td, color: "#94a3b8", textAlign: "center" }}
-                  >
-                    {i + 1}
-                  </td>
-                  <td style={{ ...s.td, color: "#1e293b", fontWeight: 400 }}>
-                    {subj.name}
-                  </td>
-                  <td style={s.td}>
-                    <GradeBar grade={subj.grade} />
-                  </td>
-                  <td style={{ ...s.td, textAlign: "center" }}>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        padding: "3px 8px",
-                        borderRadius: 99,
-                        background: c.bg,
-                        color: c.text,
-                        fontWeight: 500,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {gradeLabel(subj.grade)}
-                    </span>
-                  </td>
-                </tr>
+                  <span style={s.tabSemLabel}>Semestre</span>
+                  <span style={s.tabSemName}>{sem.semester}</span>
+                  <span style={{ ...s.tabAvg, color: c.text }}>
+                    {sem.average.toFixed(2)}
+                  </span>
+                </button>
               );
             })}
-          </tbody>
-        </table>
-      </div>
+          </div>
+
+          <div style={s.panel}>
+            <div style={s.panelHeader}>
+              <div>
+                <p style={s.panelTitle}>Semestre {current.semester}</p>
+                <p style={s.panelSub}>{current.subjects.length} materias</p>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <p style={s.panelSub}>Promedio semestre</p>
+                <p style={{ ...s.panelAvg, color: gradeColor(semAvg).text }}>
+                  {semAvg.toFixed(2)}
+                </p>
+              </div>
+            </div>
+
+            <table style={s.table}>
+              <thead>
+                <tr style={{ background: "#f8fafc" }}>
+                  <th style={{ ...s.th, width: 40 }}>#</th>
+                  <th style={{ ...s.th, textAlign: "left" }}>Materia</th>
+                  <th style={{ ...s.th, minWidth: 160 }}>Nota</th>
+                  <th style={s.th}>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {current.subjects.map((subj, i) => {
+                  const c = gradeColor(subj.grade);
+                  return (
+                    <tr
+                      key={subj.name}
+                      style={{
+                        borderTop: "1px solid #f1f5f9",
+                        background: i % 2 === 0 ? "#fff" : "#fafafa",
+                      }}
+                    >
+                      <td
+                        style={{
+                          ...s.td,
+                          color: "#94a3b8",
+                          textAlign: "center",
+                        }}
+                      >
+                        {i + 1}
+                      </td>
+                      <td
+                        style={{ ...s.td, color: "#1e293b", fontWeight: 400 }}
+                      >
+                        {subj.name}
+                      </td>
+                      <td style={s.td}>
+                        <GradeBar grade={subj.grade} />
+                      </td>
+                      <td style={{ ...s.td, textAlign: "center" }}>
+                        <span
+                          style={{
+                            fontSize: 11,
+                            padding: "3px 8px",
+                            borderRadius: 99,
+                            background: c.bg,
+                            color: c.text,
+                            fontWeight: 500,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {gradeLabel(subj.grade)}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
@@ -265,9 +277,10 @@ const s = {
   title: { margin: 0, fontSize: 24, fontWeight: 700, color: "#0f172a" },
   subtitle: { margin: "4px 0 0", fontSize: 13, color: "#64748b" },
   avgBadge: {
-    background: "#f8fafc",
+    background: "#ffffff",
     border: "1px solid #e2e8f0",
-    borderRadius: 12,
+    borderTop: "6px solid #a41926",
+    borderRadius: 16,
     padding: "10px 18px",
     textAlign: "right",
   },
@@ -300,7 +313,8 @@ const s = {
   panel: {
     background: "#fff",
     border: "1px solid #e2e8f0",
-    borderRadius: 14,
+    borderTop: "6px solid #a41926",
+    borderRadius: 16,
     overflow: "hidden",
   },
   panelHeader: {
