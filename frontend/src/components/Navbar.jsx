@@ -25,7 +25,7 @@ const Navbar = () => {
       <div className="navbar-inner">
         <div className="navbar-brand">
           <NavItem to="/dashboard" className="brand-logo">
-            Neo-SIRA (v2)
+            Neo-SIRA
           </NavItem>
         </div>
 
