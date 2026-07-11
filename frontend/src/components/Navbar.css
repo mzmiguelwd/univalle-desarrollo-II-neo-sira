@@ -1,11 +1,21 @@
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #ffffff;
+  border-bottom: 2px solid #a41926;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  min-height: 72px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 5%;
-  background-color: #ffffff;
-  border-bottom: 2px solid #a41926; /* Rojo institucional */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  gap: 20px;
 }
 
 .brand-logo {
@@ -18,6 +28,8 @@
 .navbar-links {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .nav-link {
@@ -43,4 +55,17 @@
 .logout-button:hover {
   background-color: #a41926;
   color: white;
+}
+
+@media (max-width: 900px) {
+  .navbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+  }
+
+  .navbar-links {
+    justify-content: flex-start;
+    gap: 14px;
+  }
 }

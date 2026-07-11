@@ -1,21 +1,23 @@
-import "./Dashboard.css";
 import Navbar from "../../components/Navbar";
+import "../sharedPageStyles.css";
 
 const Dashboard = () => {
   const userName = localStorage.getItem("userName") || "Estudiante";
 
   return (
-    <div className="dashboard-page">
+    <div className="page-shell">
       <Navbar />
-      <main className="dashboard-content">
-        <div className="welcome-card">
-          <span className="welcome-icon">🎓</span>
-          <h1>¡Bienvenido, {userName}!</h1>
-          <p className="welcome-message">
-            Esta es tu plataforma Neo-SIRA. Desde aquí puedes gestionar tus
-            actividades académicas, consultar calificaciones y realizar tus
-            trámites administrativos de forma centralizada.
-          </p>
+      <main className="page-content">
+        <div className="page-container">
+          <section className="page-card dashboard-card">
+            <span className="dashboard-icon">🎓</span>
+            <h1 className="page-title">¡Bienvenido, {userName}!</h1>
+            <p className="dashboard-message">
+              Esta es tu plataforma Neo-SIRA. Desde aquí puedes gestionar tus
+              actividades académicas, consultar calificaciones y realizar tus
+              trámites administrativos de forma centralizada.
+            </p>
+          </section>
         </div>
       </main>
     </div>

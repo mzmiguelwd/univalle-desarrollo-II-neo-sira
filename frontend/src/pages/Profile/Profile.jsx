@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Navbar from "../../components/Navbar";
+import "../sharedPageStyles.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
@@ -132,16 +133,20 @@ function Profile() {
   // =========================
   if (loading) {
     return (
-      <div style={s.center}>
-        <p>Cargando perfil...</p>
+      <div className="page-center">
+        <div className="status-card">
+          <p className="status-text">Cargando perfil...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={s.center}>
-        <p style={{ color: "red" }}>⚠ {error}</p>
+      <div className="page-center">
+        <div className="status-card">
+          <p className="status-text status-text--error">⚠ {error}</p>
+        </div>
       </div>
     );
   }
@@ -150,65 +155,79 @@ function Profile() {
   // UI
   // =========================
   return (
-    <div style={s.page}>
+    <div className="page-shell">
       <Navbar />
-      <h1 style={s.title}>Mi Perfil</h1>
+      <main className="page-content">
+        <div className="page-container">
+          <section className="page-card">
+            <div className="page-hero">
+              <div>
+                <h1 className="page-title">Mi Perfil</h1>
+                <p className="page-subtitle">
+                  Revisa y actualiza tus datos personales con la identidad
+                  visual institucional.
+                </p>
+              </div>
+            </div>
 
-      <form onSubmit={handleSubmit} style={s.form}>
-        <Input
-          label="Nombre"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <Input
-          label="Correo"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <Input
-          label="Teléfono"
-          name="phone"
-          value={form.phone}
-          onChange={handleChange}
-        />
-        <Input
-          label="Dirección"
-          name="address"
-          value={form.address}
-          onChange={handleChange}
-        />
-        <Input
-          label="Ciudad de residencia"
-          name="residence_city"
-          value={form.residence_city}
-          onChange={handleChange}
-        />
-        <Input
-          label="Ciudad de nacimiento"
-          name="birth_city"
-          value={form.birth_city}
-          onChange={handleChange}
-        />
-        <Input
-          label="Barrio de residencia"
-          name="district"
-          value={form.district}
-          onChange={handleChange}
-        />
-        <Input
-          label="Fecha de nacimiento"
-          name="birth_date"
-          type="date"
-          value={form.birth_date}
-          onChange={handleChange}
-        />
+            <form onSubmit={handleSubmit} className="page-form">
+              <Input
+                label="Nombre"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+              />
+              <Input
+                label="Correo"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+              />
+              <Input
+                label="Teléfono"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+              />
+              <Input
+                label="Dirección"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+              />
+              <Input
+                label="Ciudad de residencia"
+                name="residence_city"
+                value={form.residence_city}
+                onChange={handleChange}
+              />
+              <Input
+                label="Ciudad de nacimiento"
+                name="birth_city"
+                value={form.birth_city}
+                onChange={handleChange}
+              />
+              <Input
+                label="Barrio de residencia"
+                name="district"
+                value={form.district}
+                onChange={handleChange}
+              />
+              <Input
+                label="Fecha de nacimiento"
+                name="birth_date"
+                type="date"
+                value={form.birth_date}
+                onChange={handleChange}
+              />
 
-        <button type="submit" style={s.button}>
-          Guardar cambios
-        </button>
-      </form>
+              <button type="submit" className="primary-button">
+                Guardar cambios
+              </button>
+            </form>
+          </section>
+        </div>
+      </main>
     </div>
   );
 }
@@ -218,10 +237,10 @@ function Profile() {
 // =========================
 function Input({ label, name, value, onChange, type = "text" }) {
   return (
-    <div style={s.field}>
-      <label style={s.label}>{label}</label>
+    <div className="page-field">
+      <label className="page-label">{label}</label>
       <input
-        style={s.input}
+        className="page-input"
         type={type}
         name={name}
         value={value}
@@ -240,58 +259,6 @@ Input.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
-};
-
-// =========================
-// STYLES
-// =========================
-const s = {
-  page: {
-    maxWidth: 600,
-    margin: "0 auto",
-    padding: "30px 16px",
-    fontFamily: "Inter, system-ui, sans-serif",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 700,
-    marginBottom: 20,
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-  },
-  field: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 6,
-  },
-  label: {
-    fontSize: 12,
-    color: "#64748b",
-  },
-  input: {
-    padding: "10px",
-    border: "1px solid #e2e8f0",
-    borderRadius: 8,
-    fontSize: 14,
-  },
-  button: {
-    marginTop: 10,
-    padding: "10px",
-    background: "#0f172a",
-    color: "white",
-    border: "none",
-    borderRadius: 8,
-    cursor: "pointer",
-  },
-  center: {
-    display: "flex",
-    height: 200,
-    justifyContent: "center",
-    alignItems: "center",
-  },
 };
 
 export default Profile;

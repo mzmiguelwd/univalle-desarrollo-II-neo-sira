@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Navbar from "../../components/Navbar";
+import "../sharedPageStyles.css";
 
 const INITIAL_STUDENT_ID = localStorage.getItem("userCode") || "2020001";
 const CERTIFICATE_TYPES = ["Estudios", "Notas"];
@@ -17,7 +18,9 @@ const Tramites = () => {
   const [certificateType, setCertificateType] = useState("Estudios");
 
   // Retrieve API URL from environment variables
-  const API_URL = import.meta.env.VITE_API_URL || "";
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:3000/api/tramites/certificados";
 
   const handleRequestCertificate = async (event) => {
     event.preventDefault();
@@ -71,159 +74,95 @@ const Tramites = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 24,
-        background: "linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)",
-        fontFamily: "Inter, system-ui, sans-serif",
-      }}
-    >
+    <div className="page-shell">
       <Navbar />
-      <section
-        data-testid="tramites-card"
-        aria-label="Trámites Académicos"
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          background: "#ffffff",
-          border: "1px solid #e2e8f0",
-          borderRadius: 18,
-          padding: 28,
-          boxShadow: "0 18px 50px rgba(15, 23, 42, 0.08)",
-        }}
-      >
-        <h1
-          style={{ margin: 0, fontSize: 24, fontWeight: 700, color: "#0f172a" }}
+      <main className="page-content">
+        <div
+          className="page-container"
+          style={{ display: "flex", justifyContent: "center" }}
         >
-          Trámites Académicos
-        </h1>
-
-        <p
-          style={{
-            marginTop: 10,
-            marginBottom: 24,
-            color: "#475569",
-            lineHeight: 1.5,
-          }}
-        >
-          Solicita tu certificado de forma rápida y sin filas innecesarias.
-        </p>
-
-        <form
-          onSubmit={handleRequestCertificate}
-          style={{ display: "grid", gap: 14 }}
-        >
-          <label
-            style={{ display: "grid", gap: 6, color: "#334155", fontSize: 14 }}
+          <section
+            data-testid="tramites-card"
+            aria-label="Trámites Académicos"
+            className="page-card"
+            style={{ width: "100%", maxWidth: 460 }}
           >
-            ID del estudiante
-            <input
-              data-testid="tramites-student-id"
-              aria-label="ID del estudiante"
-              type="text"
-              value={studentId}
-              onChange={(event) => setStudentId(event.target.value)}
-              style={{
-                border: "1px solid #cbd5e1",
-                borderRadius: 10,
-                padding: "12px 14px",
-                fontSize: 15,
-                outline: "none",
-              }}
-            />
-          </label>
+            <h1 className="page-title">Trámites Académicos</h1>
 
-          <label
-            style={{ display: "grid", gap: 6, color: "#334155", fontSize: 14 }}
-          >
-            Tipo de certificado
-            <select
-              data-testid="tramites-certificate-type"
-              aria-label="Tipo de certificado"
-              value={certificateType}
-              onChange={(event) => setCertificateType(event.target.value)}
-              style={{
-                border: "1px solid #cbd5e1",
-                borderRadius: 10,
-                padding: "12px 14px",
-                fontSize: 15,
-                outline: "none",
-                background: "#fff",
-              }}
+            <p className="page-subtitle" style={{ marginBottom: 24 }}>
+              Solicita tu certificado de forma rápida y sin filas innecesarias.
+            </p>
+
+            <form onSubmit={handleRequestCertificate} className="page-form">
+              <label className="page-field">
+                <span className="page-label">ID del estudiante</span>
+                <input
+                  data-testid="tramites-student-id"
+                  aria-label="ID del estudiante"
+                  type="text"
+                  value={studentId}
+                  onChange={(event) => setStudentId(event.target.value)}
+                  className="page-input"
+                />
+              </label>
+
+              <label className="page-field">
+                <span className="page-label">Tipo de certificado</span>
+                <select
+                  data-testid="tramites-certificate-type"
+                  aria-label="Tipo de certificado"
+                  value={certificateType}
+                  onChange={(event) => setCertificateType(event.target.value)}
+                  className="page-select"
+                >
+                  {CERTIFICATE_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <button
+                type="submit"
+                data-testid="tramites-submit"
+                aria-label="Solicitar certificado académico"
+                disabled={loading}
+                className="primary-button"
+              >
+                {loading
+                  ? "Procesando..."
+                  : "Solicitar Certificado de Estudios"}
+              </button>
+            </form>
+
+            <button
+              type="button"
+              data-testid="tramites-back-dashboard"
+              aria-label="Volver al dashboard"
+              onClick={handleBackToDashboard}
+              className="secondary-button"
+              style={{ width: "100%", marginTop: 12 }}
             >
-              {CERTIFICATE_TYPES.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          </label>
+              Volver al dashboard
+            </button>
 
-          <button
-            type="submit"
-            data-testid="tramites-submit"
-            aria-label="Solicitar certificado académico"
-            disabled={loading}
-            style={{
-              width: "100%",
-              border: "none",
-              borderRadius: 12,
-              padding: "14px 18px",
-              fontSize: 16,
-              fontWeight: 600,
-              cursor: loading ? "not-allowed" : "pointer",
-              background: loading ? "#94a3b8" : "#2563eb",
-              color: "#ffffff",
-            }}
-          >
-            {loading ? "Procesando..." : "Solicitar Certificado de Estudios"}
-          </button>
-        </form>
-
-        <button
-          type="button"
-          data-testid="tramites-back-dashboard"
-          aria-label="Volver al dashboard"
-          onClick={handleBackToDashboard}
-          style={{
-            width: "100%",
-            marginTop: 12,
-            border: "1px solid #cbd5e1",
-            borderRadius: 12,
-            padding: "13px 18px",
-            fontSize: 15,
-            fontWeight: 600,
-            cursor: "pointer",
-            background: "#f8fafc",
-            color: "#0f172a",
-          }}
-        >
-          Volver al dashboard
-        </button>
-
-        {message ? (
-          <p
-            data-testid="tramites-message"
-            role={error ? "alert" : "status"}
-            aria-live="polite"
-            style={{
-              marginTop: 18,
-              marginBottom: 0,
-              color: error ? "#b91c1c" : "#166534",
-              background: error ? "#fef2f2" : "#f0fdf4",
-              border: `1px solid ${error ? "#fecaca" : "#bbf7d0"}`,
-              borderRadius: 12,
-              padding: "12px 14px",
-            }}
-          >
-            {message}
-          </p>
-        ) : null}
-      </section>
+            {message ? (
+              <p
+                data-testid="tramites-message"
+                role={error ? "alert" : "status"}
+                aria-live="polite"
+                className={
+                  error ? "alert alert--error" : "alert alert--success"
+                }
+                style={{ marginTop: 18, marginBottom: 0 }}
+              >
+                {message}
+              </p>
+            ) : null}
+          </section>
+        </div>
+      </main>
     </div>
   );
 };
